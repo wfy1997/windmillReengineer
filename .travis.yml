@@ -19,5 +19,5 @@ matrix:
         upload-dir: datadictionary/$TRAVIS_BRANCH/viz
         skip_cleanup: true
         on:
-          repo: bioteam/dictionaryutils
+          repo: bioteam/dictionary-visualizer
           all_branches: true
