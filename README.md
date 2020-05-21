@@ -1,3 +1,22 @@
+# dictionary-visualizer
+
+Stand-alone DD viewer for schema.json artifacts.
+
+## Usage
+
+- Enable CORS on bucket ```
+<CORSConfiguration>
+ <CORSRule>
+   <AllowedOrigin>*</AllowedOrigin>
+   <AllowedMethod>GET</AllowedMethod>
+   <AllowedHeader>*</AllowedHeader>
+ </CORSRule>
+</CORSConfiguration>
+```
+- Run app locally using `yarn start`
+- Append your dictionary S3 URL to the `window.location.hash` e.g. http://localhost:3000/#https://my-bucket.amazonaws.com/datadictionary/master/schema.json
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
