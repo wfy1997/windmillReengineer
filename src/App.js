@@ -32,8 +32,8 @@ class App extends React.Component {
       ],
     ).then(() => {
       const latestState = Object.assign({}, store);
-      console.log(latestState)
-      this.setState(latestState);
+      //console.log(latestState)
+      //this.setState(latestState);
     });
 
     return (
