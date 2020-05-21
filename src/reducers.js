@@ -1,52 +1,142 @@
-//import { reducer as formReducer } from 'redux-form';
 import { combineReducers } from 'redux';
-// import userProfile from './UserProfile/reducers';
-// import coreMetadata from './CoreMetadata/reducers';
-// import certificate from './UserAgreement/reducers';
-// import submission from './Submission/reducers';
-// import analysis from './Analysis/reducers';
-// import homepage from './Homepage/reducers';
-// import index from './Index/reducers';
-//import queryNodes from './QueryNode/reducers';
-// import popups from './Popup/reducers';
-// import graphiql from './GraphQLEditor/reducers';
-// import explorer from './Explorer/reducers';
-// import login from './Login/reducers';
-// import bar from './Layout/reducers';
-import ddgraph from './DataDictionary/reducers';
-// import privacyPolicy from './PrivacyPolicy/reducers';
-// import { logoutListener } from './Login/ProtectedContent';
 
-export const removeDeletedNode = (state, id) => {
-  const searchResult = state.search_result;
-  const nodeType = Object.keys(searchResult.data)[0];
-  const entities = searchResult.data[nodeType];
-  searchResult.data[nodeType] = entities.filter(entity => entity.id !== id);
-  return searchResult;
+import ddgraph from './DataDictionary/reducers';
+
+export const getFileNodes = dictionary => Object.keys(dictionary).filter(node => dictionary[node].category === 'data_file');
+export const getNodeTypes = dictionary => Object.keys(dictionary).filter(node => node.charAt(0) !== '_');
+
+const versionInfo = (state = {}, action) => {
+    switch (action.type) {
+    case 'RECEIVE_VERSION_INFO':
+        return { ...state,
+        dictionaryVersion: action.data.dictionary.version || 'unknown',
+        apiVersion: action.data.version || 'unknown',
+        };
+    default:
+        return state;
+    }
+};
+
+const excludeSystemProperties = (node) => {
+    const properties = node.properties && Object.keys(node.properties)
+        .filter(key => (node.systemProperties ? !node.systemProperties.includes(key) : true))
+        .reduce((acc, key) => {
+        acc[key] = node.properties[key];
+        return acc;
+        }, {});
+    return properties;
+};
+
+const getDictionaryWithExcludeSystemProperties = (dictionary) => {
+    const ret = Object.keys(dictionary)
+        .map((nodeID) => {
+        const node = dictionary[nodeID];
+        if (!node.properties) return node;
+        return {
+            ...node,
+            properties: excludeSystemProperties(node),
+        };
+        })
+        .reduce((acc, node) => {
+        acc[node.id] = node;
+        return acc;
+        }, {});
+    return ret;
+};
+
+const submission = (state = {}, action) => {
+  switch (action.type) {
+  case 'REQUEST_UPLOAD':
+    return { ...state, file: action.file, file_type: action.file_type };
+  case 'UPDATE_FILE':
+    return { ...state, file: action.file, file_type: action.file_type };
+  case 'UPDATE_FORM_SCHEMA':
+    return { ...state, formSchema: { ...state.formSchema, ...action.formSchema } };
+  case 'RECEIVE_PROJECTS':
+    return { ...state,
+      projects: action.data.reduce((map, p) => {
+        const res = map;
+        res[p.code] = p.project_id; return res;
+      }, {}),
+      projectAvail: action.data.reduce((map, p) => {
+        const res = map;
+        res[p.project_id] = p.availability_type; return res;
+      }, {}),
+    };
+  case 'RECEIVE_NODE_TYPES':
+    return { ...state, nodeTypes: action.data };
+  case 'RECEIVE_DICTIONARY':
+    return { ...state,
+      dictionary: getDictionaryWithExcludeSystemProperties(action.data),
+      nodeTypes: getNodeTypes(action.data),
+      file_nodes: getFileNodes(action.data),
+    };
+  case 'RECEIVE_AUTHORIZATION_URL':
+    return { ...state, oauth_url: action.url };
+  case 'RECEIVE_SUBMISSION_LOGIN':
+    return { ...state, login: state.result, error: state.error };
+  case 'RECEIVE_SUBMISSION': {
+    const prevCounts = ('submit_entity_counts' in state) ? state.submit_entity_counts : {};
+    const newCounts = (action.data.entities || [])
+      .map(ent => ent.type || 'unknown')
+      .reduce((db, type) => {
+        const res = db; res[type] = (res[type] || 0) + 1;
+        return res;
+      }, prevCounts);
+    const data = state.submit_result ?
+      state.submit_result.concat(action.data.entities || [])
+      : action.data.entities;
+    const status = state.submit_status ?
+      Math.max(state.submit_status, action.submit_status)
+      : action.submit_status;
+    return { ...state,
+      submit_entity_counts: newCounts,
+      submit_result: data,
+      submit_result_string: state.submit_result_string.concat(JSON.stringify(action.data, null, '    ')).concat('\n\n'),
+      submit_status: status,
+      submit_counter: state.submit_counter + 1,
+      submit_total: action.total };
+  }
+  case 'SUBMIT_SEARCH_FORM':
+    return { ...state, search_form: action.data };
+  case 'RECEIVE_SEARCH_ENTITIES':
+    return { ...state, search_result: action.data, search_status: action.search_status };
+  case 'RECEIVE_COUNTS':
+    return { ...state,
+      counts_search: action.data,
+      links_search: Object.entries(action.data)
+        .reduce((acc, entry) => { acc[entry[0]] = entry[1].length; return acc; }, {}),
+    };
+  case 'CLEAR_COUNTS':
+    return { ...state, counts_search: null, links_search: null };
+  case 'RECEIVE_UNMAPPED_FILES':
+    return { ...state, unmappedFiles: action.data };
+  case 'RECEIVE_UNMAPPED_FILE_STATISTICS':
+    return {
+      ...state,
+      unmappedFileCount: action.data.count,
+      unmappedFileSize: action.data.totalSize,
+    };
+  case 'RECEIVE_FILES_TO_MAP':
+    return { ...state, filesToMap: action.data };
+  case 'RESET_SUBMISSION_STATUS':
+    return { ...state,
+      submit_entity_counts: [],
+      submit_result: null,
+      submit_result_string: '',
+      submit_status: 0,
+      submit_counter: 0,
+      submit_total: 0,
+    };
+  default:
+    return state;
+  }
 };
 
 const reducers = combineReducers({ 
-//   privacyPolicy,
-//   bar,
-//   homepage,
-//   index,
-//   popups,
-//   user,
-//   status,
-//   versionInfo,
-// //   submission,
-// //   //analysis,
-// //   queryNodes,
-// //   userProfile,
-// //   coreMetadata,
-// //   certificate,
-//   graphiql,
-//   login,
-//   form: formReducer,
-//   auth: logoutListener,
+   submission,
    ddgraph,
-//   userAccess,
-//   userAuthMapping,
+   versionInfo
 });
 
 export default reducers;
