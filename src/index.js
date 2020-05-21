@@ -8,17 +8,9 @@ import ReduxDataDictionary from './DataDictionary';
 import reducers from './reducers'
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 
-import hardcoded_schema from './dict';
-
 const version = {"commit":"913161064b02bcef024d072873e77c8c79cc1a68","dictionary":{"commit":"520a25999fd183f6c5b7ddef2980f3e839517da5","version":"0.2.1-9-g520a259"},"version":"4.0.0-44-g9131610"};
 
 const findObjectWithRef = (obj, updateFn, root_key = '', level = 0) => {
-
-  // // have found the object
-  // if (obj.hasOwnProperty('$ref')) {
-  //   return updateFn(obj, root_key);
-  // }
-  
   // iterate over the properties
   for (var propertyName in obj) {
 
@@ -29,7 +21,7 @@ const findObjectWithRef = (obj, updateFn, root_key = '', level = 0) => {
     }
 
     // any object that is not a simple value
-    if (obj[propertyName] !== null && typeof obj[propertyName] === 'object' && propertyName !== "metaschema") {
+    if (obj[propertyName] !== null && typeof obj[propertyName] === 'object') {
       // recurse into the object and write back the result to the object graph
       obj[propertyName] = findObjectWithRef(obj[propertyName], updateFn, root_key, (level + 1));
     }
@@ -45,8 +37,12 @@ const findObjectWithRef = (obj, updateFn, root_key = '', level = 0) => {
 async function init() {
   const store = createStore(reducers);
 
+  let url = 'https://bms-gen3-dev.s3.amazonaws.com/datadictionary/master/schema.json';
+
+  if ( window.location.hash ) url = window.location.hash.slice(1);
+
   // Fetch S3 schema.jsob
-  let response = await fetch('https://bms-gen3-dev.s3.amazonaws.com/datadictionary/master/schema.json');
+  let response = await fetch(url);
   let schema = await response.json();
 
   // Remove .yaml extension from keys 
@@ -54,7 +50,6 @@ async function init() {
   for (let [key, value] of Object.entries(schema)) {
     dict[key.slice(0, -5)] = value;
   }
-  //console.log(dict)
 
   // Recursivly fix references
   dict = findObjectWithRef(dict, (refObj, rootKey)=> { // This halts for sub objects./...
@@ -84,8 +79,10 @@ async function init() {
     return refObj;
   });
 
-  // Append metaschema TODO
-  console.log(JSON.stringify(dict, null, 2))
+  // Append metaschema TODO?? Doesn't seem to matter anymore
+
+  // This is a HACK FIX ME!!@!!!
+  dict['_terms']['file_format'] = {description: 'wut'};
 
   let newDict = await $RefParser.dereference(dict, {
     continueOnError: false,            // Don't throw on the first error
@@ -94,13 +91,11 @@ async function init() {
     }
   });
 
-   console.log(newDict)
-
   await Promise.all(
     [
       store.dispatch({
         type: 'RECEIVE_DICTIONARY',
-        data: hardcoded_schema
+        data: newDict
       }),
       store.dispatch({
         type: 'RECEIVE_VERSION_INFO',
