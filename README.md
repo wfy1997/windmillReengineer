@@ -4,7 +4,8 @@ Stand-alone DD viewer for schema.json artifacts.
 
 ## Usage
 
-- Enable CORS on bucket ```
+- Enable CORS on bucket
+```
 <CORSConfiguration>
  <CORSRule>
    <AllowedOrigin>*</AllowedOrigin>
