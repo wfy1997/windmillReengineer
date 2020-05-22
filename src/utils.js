@@ -2,7 +2,7 @@ import * as d3 from 'd3-scale';
 
 //import { submissionApiPath } from './localconf';
 
-const submissionApiPath = "FIXME";
+const submissionApiPath = "FIXME-submissionApiPath";
 
 export const humanFileSize = (size) => {
   if (typeof size !== 'number') {

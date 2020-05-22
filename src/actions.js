@@ -1,12 +1,12 @@
 import 'isomorphic-fetch';
 
-const apiPath = "FIXME";
-const userapiPath = "FIXME";
-const headers = "FIXME";
-const hostname = "FIXME";
-const submissionApiOauthPath = "FIXME";
-const submissionApiPath = "FIXME";
-const graphqlSchemaUrl = "FIXME";
+const apiPath = "FIXME-apiPath";
+const userapiPath = "FIXME-userapiPath";
+const headers = "FIXME-headers";
+const hostname = "FIXME-hostname";
+const submissionApiOauthPath = "FIXME-submissionApiOauthPath";
+const submissionApiPath = "FIXME-submissionApiPath";
+const graphqlSchemaUrl = "FIXME-graphqlSchemaUrl";
 
 
 export const updatePopup = state => ({
