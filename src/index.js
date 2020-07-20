@@ -7,6 +7,16 @@ import { createStore } from 'redux'
 import ReduxDataDictionary from './DataDictionary';
 import reducers from './reducers'
 import $RefParser from "@apidevtools/json-schema-ref-parser";
+import jsonData from './schema.json';
+import axios from 'axios';
+import icdcModel from './icdc-model.yml';
+import yaml from 'js-yaml';
+import icdcModelProps from './icdc-model-props.yml'; 
+import mdfSchema from './mdf-schema.yaml';
+
+
+
+
 
 const version = {"commit":"913161064b02bcef024d072873e77c8c79cc1a68","dictionary":{"commit":"520a25999fd183f6c5b7ddef2980f3e839517da5","version":"0.2.1-9-g520a259"},"version":"4.0.0-44-g9131610"};
 
@@ -37,19 +47,168 @@ const findObjectWithRef = (obj, updateFn, root_key = '', level = 0) => {
 async function init() {
   const store = createStore(reducers);
 
-  let url = 'https://bms-gen3-dev.s3.amazonaws.com/datadictionary/master/schema.json';
+  let url = 'https://wfy1997.s3.amazonaws.com/schema.json';
 
   if ( window.location.hash ) url = window.location.hash.slice(1);
 
-  // Fetch S3 schema.jsob
-  let response = await fetch(url);
-  let schema = await response.json();
+  const icdcM = await axios(icdcModel);
+  const icdcMData = yaml.safeLoad(icdcM.data);
+  const icdcMP = await axios(icdcModelProps);
+  const icdcMPData = yaml.safeLoad(icdcMP.data);
+ 
+
+
+
+  //console.log(icdcMData.Relationships);
+  console.log(icdcMData.Nodes);
+  console.log(icdcMPData);
+  
+  //translate the json file here
+
+  const dataList={};
+  for (let [key, value] of Object.entries(icdcMData.Relationships)) {
+     // console.log(value);
+      
+  }
+
+  
+  
+
+
+
+  
+  
+
+
+
+  for (let [key, value] of Object.entries(icdcMData.Nodes)) {
+    //console.log(key);
+    //console.log(value.Category);
+    const item = {}
+    item["$schema"] = "http://json-schema.org/draft-06/schema#";
+    item["id"] = key;
+    item["title"]=key;
+    if("Category" in value){
+      item["category"]=value.Category;
+  }else{
+    item["category"]="Undefined";
+    }
+     
+    
+    item["program"]="*";
+    item["project"]="*";
+    item["additionalProperties"]=false;
+    item["submittable"]=true;
+    item["constraints"]=null;
+    //item["links"]=[];
+    
+    item["type"]="object";
+    const link=[];
+    const properties={};
+    const pRequired=[];
+    
+    if (icdcMData.Nodes[key].Props != null ) {
+     
+      for(var i=0;i<icdcMData.Nodes[key].Props.length;i++){
+        //console.log(icdcMData.Nodes[key].Props[i]);
+        const nodeP=icdcMData.Nodes[key].Props[i];
+        const propertiesItem={};
+        for(var propertyName in icdcMPData.PropDefinitions){
+          
+          if(propertyName==nodeP){
+            
+            propertiesItem["description"]=icdcMPData.PropDefinitions[propertyName].Desc;
+            propertiesItem["type"]=icdcMPData.PropDefinitions[propertyName].Type;
+            propertiesItem["src"]=icdcMPData.PropDefinitions[propertyName].Src;
+            
+            if(icdcMPData.PropDefinitions[propertyName].Req==true){
+              pRequired.push(nodeP);
+            }
+
+
+          }
+        }
+        properties[nodeP]=propertiesItem;
+
+      
+      }
+
+      item["properties"]=properties;
+      item["required"]=pRequired;
+
+    }else{
+      item["properties"]={};
+    }
+    
+    
+    for (var propertyName in icdcMData.Relationships) {
+      const linkItem={};
+      //console.log(propertyName);
+      //console.log(icdcMData.Relationships[propertyName]);
+      //console.log(icdcMData.Relationships[propertyName].Ends);
+      const label=propertyName;
+      const multiplicity=icdcMData.Relationships[propertyName].Mul;
+      const required=false;
+      for(var i=0;i<icdcMData.Relationships[propertyName].Ends.length;i++){
+        
+        if(icdcMData.Relationships[propertyName].Ends[i].Src==key){
+          const backref=icdcMData.Relationships[propertyName].Ends[i].Src;
+          const name=icdcMData.Relationships[propertyName].Ends[i].Dst;
+          const target=icdcMData.Relationships[propertyName].Ends[i].Dst;
+
+          linkItem["name"]=name;
+          linkItem["backref"]=backref;
+          linkItem["label"]=label;
+          linkItem["target_type"]=target;
+          linkItem["required"]=required;
+          
+          link.push(linkItem);
+        }
+      }
+      
+    }
+
+
+
+    //console.log(link);
+    item["links"]=link;
+
+
+    dataList[key]=item;
+
+    
+    
+  }
+  const term={};
+  
+
+  console.log(dataList);
+  
+
+
+
+
+
+  // Fetch S3 schema.json
+  //let response = await fetch(url);
+  //let schema = await response.json();
+  let schema =jsonData;
+  //let schema =dataList;
 
   // Remove .yaml extension from keys 
   let dict = {};  
   for (let [key, value] of Object.entries(schema)) {
     dict[key.slice(0, -5)] = value;
+    
   }
+  
+  /*for (let [key, value] of Object.entries(schema)) {
+    dict[key] = value;
+    
+  }*/
+
+  
+ 
 
   // Recursivly fix references
   dict = findObjectWithRef(dict, (refObj, rootKey)=> { // This halts for sub objects./...
@@ -62,7 +221,7 @@ async function init() {
       // "$ref": "#/_definitions/ubiquitous_properties",
 
       refObj = "#/" + refObj.replace('.yaml#', '');
-      console.log("ABS FIX -- " + rootKey + ": " + refObj);
+     // console.log("ABS FIX -- " + rootKey + ": " + refObj);
 
     } else {
 
@@ -72,7 +231,7 @@ async function init() {
       // "$ref": "#/{_definitions aka root key}/state"
 
       refObj = '#/' + rootKey + '/' + refObj.replace('#/', '');
-      console.log("REL FIX -- " + rootKey + ": " + refObj);
+      //console.log("REL FIX -- " + rootKey + ": " + refObj);
     }
 
 
@@ -82,7 +241,9 @@ async function init() {
   // Append metaschema TODO?? Doesn't seem to matter anymore
 
   // This is a HACK FIX ME!!@!!!
+  
   dict['_terms']['file_format'] = {description: 'wut'};
+
 
   let newDict = await $RefParser.dereference(dict, {
     continueOnError: false,            // Don't throw on the first error
@@ -91,11 +252,18 @@ async function init() {
     }
   });
 
+  //console.log(newDict);
+  const newDataList=dataList;
+  //newDataList['_terms']=newDict['_terms'];
+  //newDataList['_definitions']=newDict['_definitions'];
+  //newDataList['_settings']=newDict['_settings'];
+  //console.log(newDataList);
   await Promise.all(
     [
       store.dispatch({
         type: 'RECEIVE_DICTIONARY',
-        data: newDict
+        //data: newDict
+        data: newDataList
       }),
       store.dispatch({
         type: 'RECEIVE_VERSION_INFO',
@@ -104,7 +272,18 @@ async function init() {
     ],
   );
 
+
+ 
+
+
+
+
+
+
+
+  
   ReactDOM.render(
+    
     <React.StrictMode>
       <Provider store={store}>
         <ReduxDataDictionary />

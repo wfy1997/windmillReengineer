@@ -39,6 +39,7 @@ export const calculateGraphLayout = (dictionary, countsSearch, linksSearch) => {
   const viz = new Viz({ Module, render });
   return viz.renderJSONObject(dotString)
     .then((renderedJSON) => {
+      //console.log(renderedJSON);
       // draw nodes
       const renderedNodes = renderedJSON.objects
         .filter(n => !n.rank)

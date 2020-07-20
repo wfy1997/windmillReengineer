@@ -33,12 +33,8 @@ class Legend extends React.Component {
                   tabIndex={0}
                 />
                 <div className='data-dictionary-graph-legend__item body'>
-                  <i className='data-dictionary-graph-legend__required-icon data-dictionary-graph-legend__required-icon--required g3-icon g3-icon--minus' />
-                  <span className='data-dictionary-graph-legend__text'>Required Link</span>
-                </div>
-                <div className='data-dictionary-graph-legend__item body'>
                   <i className='data-dictionary-graph-legend__required-icon data-dictionary-graph-legend__required-icon g3-icon g3-icon--minus' />
-                  <span className='data-dictionary-graph-legend__text'>Optional Link</span>
+                  <span className='data-dictionary-graph-legend__text'>Relationships</span>
                 </div>
                 {
                   this.props.items.map((category) => {

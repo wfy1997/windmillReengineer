@@ -66,7 +66,7 @@ class DataDictionaryPropertyTable extends React.Component {
                 className='data-dictionary-property-table__data
                 data-dictionary-property-table__data--term'
               >
-                Term
+                Src
               </th>
             </tr>
           </thead>
@@ -90,20 +90,23 @@ class DataDictionaryPropertyTable extends React.Component {
                 }
                 let termID = '';
                 let termLink = '';
-                if ('term' in property) {
-                  termID = property.term.termDef && property.term.termDef.cde_id;
-                  termLink = property.term.termDef && property.term.termDef.term_url;
+                let type='';
+                if ('src' in property) {
+                  try{termID = property.src;
+                    termLink = property.term.termDef && property.term.termDef.term_url;}catch(err){}
+                  
                 }
                 const propertyNameFragment = getPropertyNameFragment(
                   propertyKey,
                   nameMatch,
                   'data-dictionary-property-table__span',
                 );
-                const propertyTypeFragment = getPropertyTypeFragment(
-                  property,
-                  typeMatchList,
-                  'data-dictionary-property-table__span',
-                );
+                if('type' in property){
+                  try{
+                    type = property.type;}catch(err){}
+                  
+                }
+               
                 const propertyDescriptionFragment = getPropertyDescriptionFragment(
                   property,
                   descriptionMatch,
@@ -116,7 +119,7 @@ class DataDictionaryPropertyTable extends React.Component {
                       {propertyNameFragment}
                     </td>
                     <td className='data-dictionary-property-table__data'>
-                      {propertyTypeFragment}
+                    <p>{JSON.stringify(type)}</p>
                     </td>
                     {
                       !this.props.hideIsRequired && (
@@ -133,10 +136,10 @@ class DataDictionaryPropertyTable extends React.Component {
                       )
                     }
                     <td className='data-dictionary-property-table__data'>
-                      {propertyDescriptionFragment}
+                    <p>{propertyDescriptionFragment}</p>
                     </td>
                     <td className='data-dictionary-property-table__data'>
-                      <a href={termLink}>{termID}</a>
+                      <p>{JSON.stringify(termID)}</p>
                     </td>
                   </tr>
                 );

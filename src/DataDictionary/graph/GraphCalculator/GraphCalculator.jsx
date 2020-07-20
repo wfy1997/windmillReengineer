@@ -73,19 +73,6 @@ class GraphCalculator extends React.Component {
           dataModelStructureRelatedNodeIDs,
           routesBetweenStartEndNodes,
         );
-      } else if (newHighlightingNode) {
-        const {
-          dataModelStructure,
-          dataModelStructureRelatedNodeIDs,
-          routesBetweenStartEndNodes,
-        } = this.getDataModelStructureForHighlightedNodes(
-          newHighlightingNode,
-        );
-        this.props.onDataModelStructureCalculated(
-          dataModelStructure,
-          dataModelStructureRelatedNodeIDs,
-          routesBetweenStartEndNodes,
-        );
       } else {
         this.props.onDataModelStructureCalculated(null);
       }

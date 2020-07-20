@@ -108,14 +108,7 @@ class OverlayPropertyTable extends React.Component {
                   rightIcon='download'
                 />
               </div>
-              <div className='overlay-property-table__node'>
-                <h3 className='overlay-property-table__node-title'>
-                  {this.getTitle()}
-                </h3>
-                <div className='overlay-property-table__node-description introduction'>
-                  {this.getDescription()}
-                </div>
-              </div>
+              
             </div>
             <div className='overlay-property-table__property'>
               <DataDictionaryPropertyTable

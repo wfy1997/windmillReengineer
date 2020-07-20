@@ -81,6 +81,7 @@ export const getPropertyNameFragment = (propertyName, matchedItem, spanClassName
 export const getPropertyTypeFragment = (property, typeMatchList, spanClassName) => {
   const type = getType(property);
   let propertyTypeFragment;
+  console.log(type);
   if (typeof type === 'string') {
     propertyTypeFragment = (
       <li>
