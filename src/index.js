@@ -9,8 +9,11 @@ import reducers from './reducers'
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 import jsonData from './schema.json';
 import axios from 'axios';
-import icdcModel from './icdc-model.yml';
 import yaml from 'js-yaml';
+// you can change to use bento data in here
+//import icdcModel from './bento_model_file.yaml';
+//import icdcModelProps from './bento_model_properties.yaml'; 
+import icdcModel from './icdc-model.yml';
 import icdcModelProps from './icdc-model-props.yml'; 
 import mdfSchema from './mdf-schema.yaml';
 

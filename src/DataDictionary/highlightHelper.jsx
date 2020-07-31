@@ -168,17 +168,26 @@ export const getMatchInsideProperty = (propertyIndex, propertyKey, property, all
         nameMatch = item;
       } else if (item.key === 'properties.description') {
         const descriptionStr = getPropertyDescription(property);
+        //console.log(descriptionStr);
         if (item.value === descriptionStr) {
           descriptionMatch = item;
         }
       } else if (item.key === 'properties.type') {
         const type = getType(property);
+        //console.log(type);
         if (typeof type === 'string') {
           if (type === item.value) {
             typeMatchList.push(item);
           }
-        } else if (type.includes(item.value)) {
-          typeMatchList.push(item);
+        } else if (Array.isArray(type)) {
+          //console.log("yes");
+          for(var a=0;a<type.length;a++){
+            
+            if(type[a] == item.value){
+              typeMatchList.push(item);
+            }
+          }
+          
         }
       }
     });
@@ -191,6 +200,8 @@ export const getMatchInsideProperty = (propertyIndex, propertyKey, property, all
 };
 
 export const getMatchesSummaryForProperties = (allProperties, allMatches) => {
+  //console.log(allProperties);
+  console.log(allMatches);
   const matchedPropertiesSummary = [];
   Object.keys(allProperties).forEach((propertyKey, propertyIndex) => {
     const property = allProperties[propertyKey];
@@ -199,6 +210,7 @@ export const getMatchesSummaryForProperties = (allProperties, allMatches) => {
       descriptionMatch,
       typeMatchList,
     } = getMatchInsideProperty(propertyIndex, propertyKey, property, allMatches);
+    //console.log(descriptionMatch);
     const summaryItem = {
       propertyKey,
       property,
@@ -210,7 +222,9 @@ export const getMatchesSummaryForProperties = (allProperties, allMatches) => {
       matchedPropertiesSummary.push(summaryItem);
     }
   });
+  //console.log(matchedPropertiesSummary);
   return matchedPropertiesSummary;
+  
 };
 
 export const getNodeTitleSVGFragment = (

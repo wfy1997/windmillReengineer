@@ -156,8 +156,17 @@ class Canvas extends React.Component {
           ref={this.svgElement}
           width={this.state.canvasWidth}
           height={this.state.canvasHeight}
+          xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <marker id="markerArrow" markerWidth="20" markerHeight="20" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="black" />
+            </marker>
+              </defs>
+  
+
           <rect
+            
             className='canvas__overlay'
             width={this.state.canvasWidth}
             height={this.state.canvasHeight}

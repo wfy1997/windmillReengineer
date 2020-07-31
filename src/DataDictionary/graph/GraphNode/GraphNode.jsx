@@ -87,6 +87,7 @@ class GraphNode extends React.Component {
           </g>
         }
       </g>
+     
     );
   }
 }

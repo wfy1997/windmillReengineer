@@ -71,43 +71,7 @@ class GraphDrawer extends React.Component {
         transform={`scale(${fittingScale}) translate(${fittingTransX}, ${fittingTransY}) `}
         ref={this.graphDomRef}
       >
-        {
-          this.props.edges.map((edge, i) => {
-            let isEdgeFaded = false;
-            let isEdgeHalfFaded = false;
-            let isEdgeHighlighted = false;
-            if (this.props.isSearchMode) {
-              isEdgeFaded = true;
-            } else if (this.props.highlightingNode) {
-              const isEdgeRelatedToHighlightedNode =
-                this.props.relatedNodeIDs.includes(edge.source)
-                && this.props.relatedNodeIDs.includes(edge.target);
-              if (this.props.secondHighlightingNodeID) {
-                const isEdgeAlongPathRelatedToSecondHighlightNode =
-                  !!this.props.pathRelatedToSecondHighlightingNode
-                    .find(e => (e.source === edge.source && e.target === edge.target));
-                isEdgeHalfFaded = isEdgeRelatedToHighlightedNode
-                  && !isEdgeAlongPathRelatedToSecondHighlightNode;
-                isEdgeFaded = !isEdgeRelatedToHighlightedNode;
-                isEdgeHighlighted = isEdgeAlongPathRelatedToSecondHighlightNode;
-              } else {
-                isEdgeFaded = !isEdgeRelatedToHighlightedNode;
-                isEdgeHighlighted = isEdgeRelatedToHighlightedNode;
-              }
-            }
-            return (
-              <GraphEdge
-                key={`${edge.source}-${edge.target}-${i}`}
-                edge={edge}
-                isRequired={edge.required}
-                isFaded={isEdgeFaded}
-                isHalfFaded={isEdgeHalfFaded}
-                isHighlighted={isEdgeHighlighted}
-              />
-            );
-          })
-        }
-        {
+         {
           this.props.nodes.map((node) => {
             let isNodeFaded = false;
             let isNodeClickable = true;
@@ -157,9 +121,48 @@ class GraphDrawer extends React.Component {
                 ref={this.getNodeRef(node.id)}
                 matchedNodeNameIndices={matchedNodeNameIndices}
               />
+            
             );
           })
         }
+        {
+          this.props.edges.map((edge, i) => {
+            let isEdgeFaded = false;
+            let isEdgeHalfFaded = false;
+            let isEdgeHighlighted = false;
+            if (this.props.isSearchMode) {
+              isEdgeFaded = true;
+            } else if (this.props.highlightingNode) {
+              const isEdgeRelatedToHighlightedNode =
+                this.props.relatedNodeIDs.includes(edge.source)
+                && this.props.relatedNodeIDs.includes(edge.target);
+              if (this.props.secondHighlightingNodeID) {
+                const isEdgeAlongPathRelatedToSecondHighlightNode =
+                  !!this.props.pathRelatedToSecondHighlightingNode
+                    .find(e => (e.source === edge.source && e.target === edge.target));
+                isEdgeHalfFaded = isEdgeRelatedToHighlightedNode
+                  && !isEdgeAlongPathRelatedToSecondHighlightNode;
+                isEdgeFaded = !isEdgeRelatedToHighlightedNode;
+                isEdgeHighlighted = isEdgeAlongPathRelatedToSecondHighlightNode;
+              } else {
+                isEdgeFaded = !isEdgeRelatedToHighlightedNode;
+                isEdgeHighlighted = isEdgeRelatedToHighlightedNode;
+              }
+            }
+            return (           
+              <GraphEdge
+                key={`${edge.source}-${edge.target}-${i}`}
+                edge={edge}
+                isRequired={edge.required}
+                isFaded={isEdgeFaded}
+                isHalfFaded={isEdgeHalfFaded}
+                isHighlighted={isEdgeHighlighted}
+              />
+    
+            );
+          })
+        }
+       
       </g>
     );
   }

@@ -8,15 +8,28 @@ class GraphEdge extends React.Component {
     const edgeFadedClassModifier = this.props.isFaded ? 'graph-edge--faded' : '';
     const edgeHalfFadedClassModifier = this.props.isHalfFaded ? 'graph-edge--half-faded' : '';
     const edgeHighlightedClassModifier = this.props.isHighlighted ? 'graph-edge--highlighted' : '';
+    
+
     return (
-      <path
+      
+        
+         <path
         className={`graph-edge 
           ${edgeRequiredClassModifier} 
           ${edgeFadedClassModifier} 
           ${edgeHalfFadedClassModifier} 
           ${edgeHighlightedClassModifier}`}
+          marker-end="url(#markerArrow)"//adding arrow
+         
         d={this.props.edge.pathString}
       />
+      
+     
+     
+
+     
+      
+      
     );
   }
 }

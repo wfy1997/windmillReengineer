@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "./static/css/main.fd8b8721.chunk.css",
+    "main.js": "./static/js/main.048e75c6.chunk.js",
+    "main.js.map": "./static/js/main.048e75c6.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.d629591c.js",
+    "runtime-main.js.map": "./static/js/runtime-main.d629591c.js.map",
+    "static/css/2.90fd4dcc.chunk.css": "./static/css/2.90fd4dcc.chunk.css",
+    "static/js/2.964ad603.chunk.js": "./static/js/2.964ad603.chunk.js",
+    "static/js/2.964ad603.chunk.js.map": "./static/js/2.964ad603.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.cebe8821fe980d31c889e23f610607e1.js": "./precache-manifest.cebe8821fe980d31c889e23f610607e1.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.90fd4dcc.chunk.css.map": "./static/css/2.90fd4dcc.chunk.css.map",
+    "static/css/main.fd8b8721.chunk.css.map": "./static/css/main.fd8b8721.chunk.css.map",
+    "static/js/2.964ad603.chunk.js.LICENSE.txt": "./static/js/2.964ad603.chunk.js.LICENSE.txt",
+    "static/media/bento_model_file.yaml": "./static/media/bento_model_file.cabf754e.yaml",
+    "static/media/bento_model_properties.yaml": "./static/media/bento_model_properties.a890e764.yaml",
+    "static/media/mdf-schema.yaml": "./static/media/mdf-schema.a43bb698.yaml"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d629591c.js",
+    "static/css/2.90fd4dcc.chunk.css",
+    "static/js/2.964ad603.chunk.js",
+    "static/css/main.fd8b8721.chunk.css",
+    "static/js/main.048e75c6.chunk.js"
+  ]
+}
