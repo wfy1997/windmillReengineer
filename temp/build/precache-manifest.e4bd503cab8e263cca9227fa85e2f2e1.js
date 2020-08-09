@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d6e45ae96ddd2396b6b421ab1fcfd540",
+    "revision": "98ff9ce22f15b7375c953bd1e44fcc5c",
     "url": "./index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/css/2.90fd4dcc.chunk.css"
   },
   {
-    "revision": "4d745b7238e2fdf9cbc7",
+    "revision": "4245b5b9405c5d192ddd",
     "url": "./static/css/main.fd8b8721.chunk.css"
   },
   {
@@ -20,20 +20,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/js/2.964ad603.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4d745b7238e2fdf9cbc7",
-    "url": "./static/js/main.048e75c6.chunk.js"
+    "revision": "4245b5b9405c5d192ddd",
+    "url": "./static/js/main.6b33e57c.chunk.js"
   },
   {
     "revision": "6921fda5046a05380ae9",
     "url": "./static/js/runtime-main.d629591c.js"
   },
   {
-    "revision": "cabf754e2a81fa8e0712d47ff271c890",
-    "url": "./static/media/bento_model_file.cabf754e.yaml"
+    "revision": "172c6dce62db81172e93f479e89f21ce",
+    "url": "./static/media/icdc-model-props.172c6dce.yml"
   },
   {
-    "revision": "a890e764ac72f9af2a154445fce22910",
-    "url": "./static/media/bento_model_properties.a890e764.yaml"
+    "revision": "c4134ffea69d61783d29ac39c66dfbae",
+    "url": "./static/media/icdc-model.c4134ffe.yml"
   },
   {
     "revision": "a43bb698f3fe8578d14473450c5ecb47",

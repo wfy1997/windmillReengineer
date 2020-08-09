@@ -13,8 +13,12 @@ import yaml from 'js-yaml';
 // you can change to use bento data in here
 //import icdcModel from './bento_model_file.yaml';
 //import icdcModelProps from './bento_model_properties.yaml'; 
+//import icdc data
 import icdcModel from './icdc-model.yml';
 import icdcModelProps from './icdc-model-props.yml'; 
+//import ctdc data
+//import icdcModel from './ctdc_model_file.yaml';
+//import icdcModelProps from './ctdc_model_properties_file.yaml';
 import mdfSchema from './mdf-schema.yaml';
 
 
