@@ -90,3 +90,8 @@ This section has moved here: <https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: <https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify>
+
+### `temp` folder
+
+Inside the project folder, there is a “temp” folder, inside the temp folder, there exists a “build” folder, a “Dockerfile”, and an “app.yaml.” The“build” folder is a copy of the “build” folder in the main directory. Users can use the “Dockerfile” and the “build” folder to create a docker and run in Docker Desktop or can use the “app.yaml” and the “build” folder to run this application in GCP using app engine.
+
