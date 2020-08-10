@@ -87,7 +87,7 @@ async function init() {
   
 
 
-
+//using the following code the convert MDF to Gen3 format
   for (let [key, value] of Object.entries(icdcMData.Nodes)) {
     //console.log(key);
     //console.log(value.Category);

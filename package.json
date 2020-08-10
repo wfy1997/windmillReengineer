@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
+  "license" : "GPL-3.0-only",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.1",
     "@gen3/ui-component": "^0.5.1",
