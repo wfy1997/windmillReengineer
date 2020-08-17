@@ -11,14 +11,14 @@ import jsonData from './schema.json';
 import axios from 'axios';
 import yaml from 'js-yaml';
 // you can change to use bento data in here
-//import icdcModel from './bento_model_file.yaml';
-//import icdcModelProps from './bento_model_properties.yaml'; 
+//import icdcModel from './Schema/bento_model_file.yaml';
+//import icdcModelProps from './Schema/bento_model_properties.yaml'; 
 //import icdc data
-import icdcModel from './icdc-model.yml';
-import icdcModelProps from './icdc-model-props.yml'; 
+import icdcModel from './Schema/icdc-model.yml';
+import icdcModelProps from './Schema/icdc-model-props.yml'; 
 //import ctdc data
-//import icdcModel from './ctdc_model_file.yaml';
-//import icdcModelProps from './ctdc_model_properties_file.yaml';
+//import icdcModel from './Schema/ctdc_model_file.yaml';
+//import icdcModelProps from './Schema/ctdc_model_properties_file.yaml';
 import mdfSchema from './mdf-schema.yaml';
 
 
@@ -66,18 +66,12 @@ async function init() {
 
 
 
-  //console.log(icdcMData.Relationships);
-  console.log(icdcMData.Nodes);
-  console.log(icdcMPData);
+  
   
   //translate the json file here
 
   const dataList={};
-  for (let [key, value] of Object.entries(icdcMData.Relationships)) {
-     // console.log(value);
-      
-  }
-
+  
   
   
 
@@ -89,8 +83,7 @@ async function init() {
 
 //using the following code the convert MDF to Gen3 format
   for (let [key, value] of Object.entries(icdcMData.Nodes)) {
-    //console.log(key);
-    //console.log(value.Category);
+   
     const item = {}
     item["$schema"] = "http://json-schema.org/draft-06/schema#";
     item["id"] = key;
@@ -117,7 +110,7 @@ async function init() {
     if (icdcMData.Nodes[key].Props != null ) {
      
       for(var i=0;i<icdcMData.Nodes[key].Props.length;i++){
-        //console.log(icdcMData.Nodes[key].Props[i]);
+     
         const nodeP=icdcMData.Nodes[key].Props[i];
         const propertiesItem={};
         for(var propertyName in icdcMPData.PropDefinitions){
@@ -150,9 +143,7 @@ async function init() {
     
     for (var propertyName in icdcMData.Relationships) {
       const linkItem={};
-      //console.log(propertyName);
-      //console.log(icdcMData.Relationships[propertyName]);
-      //console.log(icdcMData.Relationships[propertyName].Ends);
+      
       const label=propertyName;
       const multiplicity=icdcMData.Relationships[propertyName].Mul;
       const required=false;
@@ -177,7 +168,7 @@ async function init() {
 
 
 
-    //console.log(link);
+  
     item["links"]=link;
 
 
@@ -189,7 +180,6 @@ async function init() {
   const term={};
   
 
-  console.log(dataList);
   
 
 
@@ -259,12 +249,12 @@ async function init() {
     }
   });
 
-  //console.log(newDict);
+  
   const newDataList=dataList;
   //newDataList['_terms']=newDict['_terms'];
   //newDataList['_definitions']=newDict['_definitions'];
   //newDataList['_settings']=newDict['_settings'];
-  //console.log(newDataList);
+  
   await Promise.all(
     [
       store.dispatch({
